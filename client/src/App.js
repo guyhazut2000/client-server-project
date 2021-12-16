@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Login from "./components/LoginForm";
+import Signup from "./pages/Signup";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import "bootstrap";
+import PageNotFound from "./pages/PageNotFound";
+import ForgotPasswordForm from "./pages/ForgotPassword";
+import Dashboard from "./pages/Dashboard";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        {/* <Route exact path="/">
+          {user ? <Redirect to="/home" /> : <Login />}
+        </Route>
+        <Route exact path="/course">
+          {user ? <CourseList /> : <Login />}
+        </Route>
+        <Route exact path="/course/:courseName">
+          {user ? <Course /> : <Login />}
+        </Route>
+        <Route path="/home">{user ? <Home /> : <Redirect to="/" />}</Route>
+        <Route path="/about" component={About} />
+        <Route path="/sign-up" component={SignUp} />
+        <Route path="/admin" component={Admin} /> */}
+        <Route exact path="/sign-in" component={Login} />
+        <Route exact path="/sign-up" component={Signup} />
+        <Route exact path="/forgot-password" component={ForgotPasswordForm} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route path="*" component={PageNotFound} />
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;
