@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import UserDataService from "../services/User";
+import validator from 'validator';
 import Swal from "sweetalert2";
 import 'bootstrap'
 
-const SignupForm = () => {
+const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -14,6 +15,34 @@ const SignupForm = () => {
 
   console.log("login is rendered");
 
+const validateString = (string) => {
+  function validate(){
+    var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
+    var name = document.getElementById('name').value;
+    if(!regName.test(name)){
+        alert('Please enter your full name (first & last name).');
+        document.getElementById('name').focus();
+        return false;
+    }else{
+        alert('Valid name given.');
+        return true;
+    }
+}
+return validate(string);
+}
+
+  const validateFields = () => {
+var fieldsValidator = true;
+var isEmail = validator.isEmail(email);
+var isString = validateString(firstName);
+
+  };
+
+  const handleSignUpClick = (e) => {
+    e.preventDefault();
+    var isValid = validateFields()
+
+  };
   
 //   // login
 //   const login = async (e) => {
@@ -73,9 +102,8 @@ const SignupForm = () => {
   return (
     <>
       <div className="registration-form">
-          <h1>Creat an Account!</h1>       
            <form>
-          <br />
+          <h1>Creat an Account!</h1>       
           <div className="form-icon">
             <span>
               <i className="icon icon-user"></i>
@@ -85,7 +113,7 @@ const SignupForm = () => {
             <input
               type="text"
               className="form-control item"
-              id="firstname"
+              id="firstName"
               placeholder="First Name"
               onChange={(e) => {
                 setFirstName(e.target.value);
@@ -141,9 +169,9 @@ const SignupForm = () => {
             <button
               type="button"
               className="btn btn-block create-account"
-              onClick={(e) => {}}
+              onClick={(e) => {handleSignUpClick()}}
             >
-              Login
+              Sign Up
             </button>
           </div>
           <div className="mt-5 p-5 text-center links">
@@ -165,4 +193,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default SignUpForm;

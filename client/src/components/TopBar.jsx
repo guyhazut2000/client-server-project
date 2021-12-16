@@ -1,6 +1,6 @@
 import React from "react";
 import "../css/topbar.css";
-import { NotificationsNone, Language, Settings ,Search} from "@material-ui/icons";
+import { NotificationsNone, Language, Settings ,Search} from "@material-ui/icons"
 import { Link } from "react-router-dom";
 
 const TopBar = () => {
