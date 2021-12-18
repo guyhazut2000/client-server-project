@@ -25,6 +25,12 @@ const SideBar = () => {
               About Us
             </li>
             </Link>
+            <Link to="/test" >
+            <li className="sidebarListItem">
+              <Info className="sidebarIcon" />
+              test
+            </li>
+            </Link>
             
             
           </ul>

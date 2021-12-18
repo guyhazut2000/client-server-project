@@ -3,76 +3,86 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import UserDataService from "../services/User";
 import Swal from "sweetalert2";
+import validator from 'validator'
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../redux/userRedux";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
   let history = useHistory();
 
-  console.log("login is rendered");
+// function to validate fields.
+  const validateFields = () => {
+    // validate empty fields.
+if(email ==="" || password ==="" ){
+  return {status:false, error:{header:"Empty Fields",msg:"Please fill all of your fields"}};
+}
+var isEmail = validator.isEmail(email);
+if(!isEmail){
+  return {status:false, error:{header:"Wrong Email Format",msg:"Please fill Email correctly. for example - test@gmail.com"}};
+}
+return {status:true,error:{}}
+  };
 
-  
-  // login
-  const login = async (e) => {
+  // handle sign up click button
+  const handleLoginClick = async (e) => {
     e.preventDefault();
-    // check if fields not empty
-    if (password === "" || email === "") {
+    // check fields validation.
+    var validation = validateFields()
+    if(!validation.status){
       Swal.fire(
-        "Error!",
-        "Login failed! Please fill all of your fields.",
+        validation.error.header,
+        validation.error.msg,
         "error"
       );
       return;
     }
-   
-    try {
-      console.log("start login process");
-      var user;
-      var userOnline = false;
-      //  user object data
-      var data = { email: email ,password: password};
-      // check if the user exist in db.
-      var res = await UserDataService.getUser(data);
-      // console.log(res, res.data);
-      if (res.data === null) {
-        Swal.fire("Error!", "Login failed! User is Not Exists.", "error");
-        return;
-      } else {
-        user = res.data;
-        // console.log("User Login data:", res.data);
-        if (user.isOnline) {
-          userOnline = true;
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "User is already online.",
-          });
-        }
-        // check if user exists.
-        if (userOnline) {
-          console.log("user is online already");
-          return;
-        }
-        // login user
-        res = await UserDataService.login(data);
-        console.log(res.data);
-        if (res.data !== null) {
-          user = res.data;
-          console.log("user login successfully.");
-          Swal.fire("Welcome!", "You Logged in successfully!", "success");
-          history.push("/home");
-        }
+
+    // login user
+    try { 
+      var data = {
+        email:email,
+        password:password,
       }
+      var user = await UserDataService.loginUser(data);
+      // if email is already exists in db.
+      if(user.data === null){
+        Swal.fire(
+          "Login Error",
+          "User credentials are wrong.",
+          "error"
+        );
+        return;
+      }
+        // display success msg and move to home page.
+      if(user.data !== null ){
+        // set currentUser in redux store
+        dispatch(loginSuccess(user));
+        // display msg
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "User Logged in successfully.\nMoving to Home Page.",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+      // go to home page
+      setTimeout(function () {
+        history.push("/");
+      }, 2000);
     } catch (error) {
-      console.log(error.message);
+      console.log(error)
     }
   };
+ 
   return (
     <>
       <div className="registration-form">
-      <h1>Login</h1>     
         <form>
-          <br />
+      <h1>Login</h1>     
           <div className="form-icon">
             <span>
               <i className="icon icon-user"></i>
@@ -110,26 +120,20 @@ const Login = () => {
             <button
               type="button"
               className="btn btn-block create-account"
-              onClick={(e) => login(e)}
+              onClick={(e) => handleLoginClick(e)}
             >
               Login
             </button>
           </div>
-        </form>
-        <div className="social-media">
-          <h5>Sign up with social media</h5>
-          <div className="social-icons">
-            <a href="#">
-              <i className="icon-social-facebook" title="Facebook"></i>
-            </a>
-            <a href="#">
-              <i className="icon-social-google" title="Google"></i>
-            </a>
-            <a href="#">
-              <i className="icon-social-twitter" title="Twitter"></i>
-            </a>
-          </div>
+        <div className="mt-5 p-5 text-center links">
+            <div className="forgot-password">
+            <a href="/forgot-password">Forgot Password?</a>
+            </div>
+            <div className="login">
+                <a href="/sign-up">Don't have account? Sign up!</a>
+            </div>
         </div>
+        </form>
         <h6 className="mt-5 p-5 text-center text-secondary ">
           Copyright © 2021 . All Rights Reserved.
         </h6>

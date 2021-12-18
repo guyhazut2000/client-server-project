@@ -3,10 +3,9 @@ var AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const CarTreatmentSchema = new mongoose.Schema(
   {
-    number: { type: Number },
-    info: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date },
+    treatmentNumber: { type: Number, unique: true },
+    treatmentInformation: { type: String, required: true },
+    date: { type: Date, default: Date.now },
     workerEmail: { type: String, required: true },
     carNumber: { type: String, required: true },
   },
@@ -15,8 +14,8 @@ const CarTreatmentSchema = new mongoose.Schema(
 );
 
 CarTreatmentSchema.plugin(AutoIncrement, {
-  id: "number_seq",
-  inc_field: "number",
+  id: "treatmentNumber_seq",
+  inc_field: "treatmentNumber",
 });
 
 module.exports = mongoose.model("CarTreatment", CarTreatmentSchema);

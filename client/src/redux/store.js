@@ -1,8 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-//import cartReducer from "./cartRedux";
-// import userReducer from "./userRedux";
-// import courseReducer from "./courseRedux";
-// import gradeReducer from "./gradeRedux";
+import userReducer from "./userRedux";
 import {
   persistStore,
   persistReducer,
@@ -22,9 +19,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  //   user: userReducer,
-  //   course: courseReducer,
-  //   grade: gradeReducer,
+  user: userReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

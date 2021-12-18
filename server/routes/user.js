@@ -1,29 +1,22 @@
 const User = require("../models/User");
 const router = require("express").Router();
+var nodemailer = require("nodemailer");
+
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "clientservertesting2021@gmail.com",
+    pass: "client@server2021",
+  },
+});
 
 // login user
 router.post("/login", async (req, res) => {
   try {
-    /*
-    sometimes mongodb allows multiple unique index's, this func is fixing the problem.
-    */
-    // User.createIndexes();
-    // console.log(req.body);
-    const user = await User.findOneAndUpdate(
-      {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        isOnline: false,
-      },
-      {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        isOnline: true,
-      },
-      { new: true }
-    );
+    const user = await User.findOne({
+      email: req.body.email,
+      password: req.body.password,
+    });
     // console.log("Server console - login user", user);
     res.status(200).json(user);
   } catch (err) {
@@ -34,20 +27,13 @@ router.post("/login", async (req, res) => {
 // logout user
 router.post("/logout", async (req, res) => {
   try {
-    /*
-      sometimes mongodb allows multiple unique index's, this func is fixing the problem.
-      */
-    // console.log("body Data", req.body);
-    // User.createIndexes();
     const user = await User.findOneAndUpdate(
       {
-        username: req.body.username,
         email: req.body.email,
         password: req.body.password,
         isOnline: true,
       },
       {
-        username: req.body.username,
         email: req.body.email,
         password: req.body.password,
         isOnline: false,
@@ -61,98 +47,54 @@ router.post("/logout", async (req, res) => {
   }
 });
 
-// UPDATE USER
-router.post("/update", async (req, res) => {
-  try {
-    /*
-    sometimes mongodb allows multiple unique index's, this func is fixing the problem.
-    */
-    // User.createIndexes();
-    currentUser = req.body.currentUser;
-    toUpdateUser = req.body.toUpdateUser;
-    // User.findOneAndUpdate(current user, update user , options , callback )
-    const updatedUser = await User.findOneAndUpdate(
-      {
-        username: currentUser.username,
-        email: currentUser.email,
-        password: currentUser.password,
-      },
-      {
-        username: toUpdateUser.username,
-        email: toUpdateUser.email,
-        password: toUpdateUser.password,
-      },
-      { new: true }
-    );
-    updatedUser
-      ? res.status(200).json(updatedUser)
-      : res.status(404).json({
-          error: "failed to update user." + err.message,
-        });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // ADD USER
 router.put("/add-user", async (req, res) => {
   try {
-    console.log(req.body);
+    console.log("add new user: ", req.body);
     await new User(req.body).save();
     res.status(200).json({ status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-// DELETE USER
-router.delete("/delete-user", async (req, res) => {
-  try {
-    // sometimes mongodb allows multiple unique index's, this func is fixing the problem.
-    // User.createIndexes();
-    console.log(req.body.username);
-    const isDeleted = await User.findOneAndDelete({
-      username: req.body.username,
-    });
-    console.log(isDeleted);
-    isDeleted
-      ? res.status(200).json({ status: "success" })
-      : res.status(300).json({ error: "user in not exists in DB." });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
-// GET USER Example(http://localhost:5000/api/users/guy)
-router.post("/:user", async (req, res) => {
+// GET USER BY EMAIL
+router.get("/:email", async (req, res) => {
   try {
-    /*
-    sometimes mongodb allows multiple unique index's, this func is fixing the problem.
-    */
-    // User.createIndexes();
-    console.log(req.body);
-    const user = await User.findOne({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-    });
-    // console.log(user);
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// GET USER BY ID
-router.get("/:id", async (req, res) => {
-  try {
-    /*
-    sometimes mongodb allows multiple unique index's, this func is fixing the problem.
-    */
-    // User.createIndexes();
-    console.log(req.body);
-    const user = await User.findById({ _id: req.params.id });
+    console.log("user email: ", req.params.email);
+    const user = await User.findOne({ email: req.params.email });
     console.log("user ", user);
     res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET USER PASSWORD BY EMAIL
+router.get("/forgot-password/:email", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    console.log(user);
+    if (user === null) {
+      res.status(403).json({ userExists: false, mailSent: false });
+    } else {
+      // send mail with password
+      var mailOptions = {
+        from: "clientservertesting2021@gmail.com",
+        to: res.params.email,
+        subject: "Car Service Password",
+        text: "Your Password is: " + user.password,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+          res.status(200).json({ userExists: true, mailSent: true });
+        }
+      });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

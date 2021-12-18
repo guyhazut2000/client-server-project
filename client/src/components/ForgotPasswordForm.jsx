@@ -5,14 +5,43 @@ import Swal from "sweetalert2";
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   let history = useHistory();
 
-  console.log("login is rendered");
+  const sendUserPassword = async (e) => {
+try{
+    e.preventDefault();
+    // check if email exists
+    var user = await UserDataService.getUserPasswordByEmail(email);
+    console.log(user.data)
+    // if email isn't exists in db
+    if(!user.data.userExists){
+      Swal.fire(
+        "Email Error",
+        "Email is not exists in DB.",
+        "error"
+      );
+      return;
+    }
+    if(user.data.userExits && user.data.mailSent){
+      Swal.fire(
+        "Password Sent Successfully",
+        "Your Email Password sent successfully to your email address.",
+        "success"
+      );
+      return;
+    }else{
+      Swal.fire(
+        "Email Error",
+        "We got error trying to send you the",
+        "error"
+      );
+      return;
+    }
 
+  } catch (error){
+    console.log(error)
+  }
+  }
     return (
         <>
         <div className="registration-form">
@@ -37,7 +66,7 @@ const ForgotPasswordForm = () => {
               <button
                 type="button"
                 className="btn btn-block create-account"
-                onClick={(e) => {}}
+                onClick={(e) => {sendUserPassword(e)}}
               >
                 Reset Password
               </button>
@@ -51,7 +80,6 @@ const ForgotPasswordForm = () => {
             </div>
         </div>
           </form>
-         
           <h6 className="mt-5 p-5 text-center text-secondary ">
             Copyright © 2021 . All Rights Reserved.
           </h6>

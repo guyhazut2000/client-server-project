@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import UserDataService from "../services/User";
 import validator from 'validator';
 import Swal from "sweetalert2";
 import 'bootstrap'
+import { useHistory } from "react-router-dom";
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
@@ -13,92 +13,100 @@ const SignUpForm = () => {
   const [lastName, setLastName] = useState("");
   let history = useHistory();
 
-  console.log("login is rendered");
-
+// function to validate string value.
 const validateString = (string) => {
-  function validate(){
-    var regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
-    var name = document.getElementById('name').value;
-    if(!regName.test(name)){
-        alert('Please enter your full name (first & last name).');
-        document.getElementById('name').focus();
-        return false;
-    }else{
-        alert('Valid name given.');
-        return true;
+  function isValidName(string) {
+    if (
+        typeof string !== "string" ||
+        /[0-9]+/g.test(string)
+    ) {
+        return false; 
     }
+    return true;
 }
-return validate(string);
+return isValidName(string);
 }
-
+// function to validate fields.
   const validateFields = () => {
-var fieldsValidator = true;
-var isEmail = validator.isEmail(email);
+    // validate empty fields.
+if(email ==="" || password ==="" || repeatPassword === "" || firstName === "" || lastName === ""){
+  return {status:false, error:{header:"Empty Fields",msg:"Please fill all of your fields"}};
+}
+// validate email
 var isString = validateString(firstName);
-
+if(!isString){
+  return {status:false, error:{header:"First Name Error",msg:"First Name should contain only chars."}};
+}
+isString = validateString(lastName);
+if(!isString){
+  return {status:false, error:{header:"Last Name Error",msg:"Last Name should contain only chars."}};
+}
+var isEmail = validator.isEmail(email);
+if(!isEmail){
+  return {status:false, error:{header:"Wrong Email Format",msg:"Please fill Email correctly. for example - test@gmail.com"}};
+}
+if(password.localeCompare(repeatPassword) !== 0){
+  return {status:false, error:{header:"Password isn't matching",msg:"Please fill the same password in both fields."}};
+}
+return {status:true,error:{}}
   };
 
-  const handleSignUpClick = (e) => {
+  // handle sign up click button
+  const handleSignUpClick = async (e) => {
     e.preventDefault();
-    var isValid = validateFields()
+    // check fields validation.
+    var validation = validateFields()
+    if(!validation.status){
+      Swal.fire(
+        validation.error.header,
+        validation.error.msg,
+        "error"
+      );
+      return;
+    }
+
+    // check if email exists in DB.
+    try { 
+      var user = await UserDataService.getUserByEmail(email);
+      // if email is already exists in db.
+      if(user.data !==null){
+        console.log(user.data);
+        Swal.fire(
+          "Sign Up Error",
+          "Email is already been used. please choose different email.",
+          "error"
+        );
+        return;
+      }
+
+      // create new user
+      var data = {
+        firstName:firstName,
+        lastName:lastName,
+        email:email,
+        password:password,
+        repeatPassword:repeatPassword
+      }
+      var newUser = await UserDataService.createNewUser(data);
+      if(newUser.data !== null){
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "New User created successfully.\nMoving to Login Page.",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+      // window.location.reload();
+      setTimeout(function () {
+        history.push("/sign-in");
+      }, 2000);
+    } catch (error) {
+      console.log(error)
+    }
 
   };
-  
-//   // login
-//   const login = async (e) => {
-//     e.preventDefault();
-//     // check if fields not empty
-//     if (password === "" || email === "") {
-//       Swal.fire(
-//         "Error!",
-//         "Login failed! Please fill all of your fields.",
-//         "error"
-//       );
-//       return;
-//     }
-   
-//     try {
-//       console.log("start login process");
-//       var user;
-//       var userOnline = false;
-//       //  user object data
-//       var data = { email: email ,password: password};
-//       // check if the user exist in db.
-//       var res = await UserDataService.getUser(data);
-//       // console.log(res, res.data);
-//       if (res.data === null) {
-//         Swal.fire("Error!", "Login failed! User is Not Exists.", "error");
-//         return;
-//       } else {
-//         user = res.data;
-//         // console.log("User Login data:", res.data);
-//         if (user.isOnline) {
-//           userOnline = true;
-//           Swal.fire({
-//             icon: "error",
-//             title: "Oops...",
-//             text: "User is already online.",
-//           });
-//         }
-//         // check if user exists.
-//         if (userOnline) {
-//           console.log("user is online already");
-//           return;
-//         }
-//         // login user
-//         res = await UserDataService.login(data);
-//         console.log(res.data);
-//         if (res.data !== null) {
-//           user = res.data;
-//           console.log("user login successfully.");
-//           Swal.fire("Welcome!", "You Logged in successfully!", "success");
-//           history.push("/home");
-//         }
-//       }
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   };
+ 
   return (
     <>
       <div className="registration-form">
@@ -169,7 +177,7 @@ var isString = validateString(firstName);
             <button
               type="button"
               className="btn btn-block create-account"
-              onClick={(e) => {handleSignUpClick()}}
+              onClick={(e) => {handleSignUpClick(e)}}
             >
               Sign Up
             </button>

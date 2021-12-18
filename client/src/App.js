@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import Login from "./components/LoginForm";
 import Signup from "./pages/Signup";
 import {
@@ -13,26 +14,23 @@ import ForgotPasswordForm from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 
 const App = () => {
+  const user = useSelector((state) => state.user.currentUser);
+
   return (
     <Router>
       <Switch>
-        {/* <Route exact path="/">
-          {user ? <Redirect to="/home" /> : <Login />}
+        <Route exact path="/sign-in">
+          {user ? <Redirect to="/" /> : <Login />}
         </Route>
-        <Route exact path="/course">
-          {user ? <CourseList /> : <Login />}
+        <Route exact path="/sign-up">
+          {user ? <Redirect to="/dashboard" /> : <Signup />}
         </Route>
-        <Route exact path="/course/:courseName">
-          {user ? <Course /> : <Login />}
+        <Route exact path="/forgot-password">
+          {user ? <Redirect to="/dashboard" /> : <ForgotPasswordForm />}
         </Route>
-        <Route path="/home">{user ? <Home /> : <Redirect to="/" />}</Route>
-        <Route path="/about" component={About} />
-        <Route path="/sign-up" component={SignUp} />
-        <Route path="/admin" component={Admin} /> */}
-        <Route exact path="/sign-in" component={Login} />
-        <Route exact path="/sign-up" component={Signup} />
-        <Route exact path="/forgot-password" component={ForgotPasswordForm} />
-        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/">
+          {user ? <Dashboard /> : <Redirect to="/sign-in" />}
+        </Route>
         <Route path="*" component={PageNotFound} />
       </Switch>
     </Router>

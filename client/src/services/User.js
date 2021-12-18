@@ -1,20 +1,18 @@
 import http from "../http-common";
 
 class UserDataService {
-  // login user
-  login(data) {
+  // get user info by email.
+  getUserByEmail(email) {
+    return http.get(`/users/${email}`);
+  }
+  loginUser(data) {
     return http.post("/users/login", data);
   }
-  // logout user
-  logout(data) {
-    return http.post("/users/logout", data);
+  createNewUser(data) {
+    return http.put("/users/add-user", data);
   }
-  // get user
-  getUser(data) {
-    return http.post(`/users/${data.username}`, data);
-  }
-  getUserByID(id) {
-    return http.get(`/users/${id}`);
+  getUserPasswordByEmail(email) {
+    return http.get(`/users/forgot-password/${email}`);
   }
 }
 

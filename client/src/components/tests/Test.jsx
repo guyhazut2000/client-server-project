@@ -4,37 +4,69 @@ import ToolkitProvider, {
   CSVExport,
 } from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
-import WorkerDataService from "../services/Worker";
-import React, { useState, useEffect } from "react";
-import moment from "moment";
-import UpdateButton from "./buttons/UpdateButton";
-import DeleteButton from "./buttons/DeleteButton";
+
 const { SearchBar, ClearSearchButton } = Search;
 const { ExportCSVButton } = CSVExport;
 
-const DataTable = () => {
-  console.log("data table is rendered");
-  // set car treatments object
-  const [carTreatments, setCarTreatments] = useState([]);
-  // fetch car treatments
-  useEffect(() => {
-    const getCarTreatments = async () => {
-      try {
-        var res = await WorkerDataService.getAllCarTreatments();
-        if (res.data !== null) {
-          console.log(res.data);
-          setCarTreatments(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getCarTreatments();
-  }, []);
-  // get all car treatments data
-
-  console.log(carTreatments);
+const Test = () => {
+  const products = [
+    {
+      treatmentNumber: "1",
+      treatmentInformation: "1323",
+      date: "123123123",
+      workerEmail: "guy@gmail.com",
+      carNumber: "1",
+    },
+    {
+      treatmentNumber: "2",
+      treatmentInformation: "123",
+      date: "123123123",
+      workerEmail: "guy@gmail.com",
+      carNumber: "1",
+    },
+    {
+      treatmentNumber: "1",
+      treatmentInformation: "1323",
+      date: "123123123",
+      workerEmail: "guy@gmail.com",
+      carNumber: "1",
+    },
+    {
+      treatmentNumber: "2",
+      treatmentInformation: "123",
+      date: "123123123",
+      workerEmail: "guy@gmail.com",
+      carNumber: "1",
+    },
+    {
+      treatmentNumber: "1",
+      treatmentInformation: "1323",
+      date: "123123123",
+      workerEmail: "guy@gmail.com",
+      carNumber: "1",
+    },
+    {
+      treatmentNumber: "2",
+      treatmentInformation: "123",
+      date: "123123123",
+      workerEmail: "guy@gmail.com",
+      carNumber: "1",
+    },
+    {
+      treatmentNumber: "1",
+      treatmentInformation: "1323",
+      date: "123123123",
+      workerEmail: "guy@gmail.com",
+      carNumber: "1",
+    },
+    {
+      treatmentNumber: "2",
+      treatmentInformation: "123",
+      date: "123123123",
+      workerEmail: "guy@gmail.com",
+      carNumber: "1",
+    },
+  ];
   const columns = [
     {
       dataField: "treatmentNumber",
@@ -49,13 +81,6 @@ const DataTable = () => {
     {
       dataField: "date",
       text: "Date",
-      formatter: (cell) => {
-        const time = moment(cell);
-        return time.format("DD/MM/YY HH:mm");
-      },
-      editor: {
-        type: Type.DATE,
-      },
       sort: true,
     },
     {
@@ -67,21 +92,14 @@ const DataTable = () => {
       dataField: "carNumber",
       text: "Car Number",
       sort: true,
-      // Perform a sorting
-      sortFunc: (a, b, order, dataField, rowA, rowB) => {
-        if (order === "asc") {
-          return a - b;
-        }
-        return b - a; // desc
-      },
     },
     {
       dataField: "action",
       formatter: (rowContent, row) => {
         return (
-          <div className="d-flex flex-row">
-            <UpdateButton row={row} workerEmail="guysdfsfd@gmail.com" />
-            <DeleteButton row={row} />
+          <div>
+            <button onClick={() => console.log("test")}>Edit</button>
+            <button onClick={() => console.log("test")}>Delete</button>
           </div>
         );
       },
@@ -123,19 +141,14 @@ const DataTable = () => {
       },
       {
         text: "All",
-        value: carTreatments.length,
+        value: products.length,
       },
     ], // A numeric array is also available. the purpose of above example is custom the text
   };
 
   return (
     <div>
-      <ToolkitProvider
-        keyField="id"
-        data={carTreatments}
-        columns={columns}
-        search
-      >
+      <ToolkitProvider keyField="id" data={products} columns={columns} search>
         {(props) => (
           <div>
             <h3>Input something at below input field:</h3>
@@ -146,12 +159,13 @@ const DataTable = () => {
               {...props.baseProps}
               pagination={paginationFactory(options)}
             />
-            <ExportCSVButton {...props.csvProps}>Export CSV</ExportCSVButton>
+            <ExportCSVButton {...props.csvProps}>Export CSV!!</ExportCSVButton>
           </div>
         )}
       </ToolkitProvider>
+      ;
     </div>
   );
 };
 
-export default DataTable;
+export default Test;

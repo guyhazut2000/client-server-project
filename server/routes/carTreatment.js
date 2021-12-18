@@ -23,10 +23,43 @@ router.delete("/delete", async (req, res) => {
     console.log(isDeleted);
     isDeleted
       ? res.status(200).json({ status: "success" })
-      : res.status(300).json({ error: "car treatment in not exists in DB." });
+      : res.status(403).json({ error: "car treatment is not exists in DB." });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+// GET ALL CAR TREATMENTS
+router.get("/get-all", async (req, res) => {
+  try {
+    const carTreatments = await CarTreatment.find();
+    res.status(200).json(carTreatments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// UPDATE CAR TREATMENT
+router.post("/update", async (req, res) => {
+  try {
+    console.log("add car treatment request: ", req.body);
+    var carTreatmentID = req.body._id;
+    var carTreatment = await CarTreatment.findByIdAndUpdate(
+      {
+        _id: carTreatmentID,
+      },
+      {
+        treatmentInformation: req.body.treatmentInformation,
+        date: Date.now(),
+        workerEmail: req.body.workerEmail,
+        carNumber: req.body.carNumber,
+      },
+      { new: true }
+    );
+    console.log(carTreatment);
+    res.status(200).json(carTreatment);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = router;
