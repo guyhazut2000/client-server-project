@@ -4,7 +4,6 @@ import DataTable from "../components/DataTable";
 import TopBar from "../components/TopBar";
 import AboutUs from "../components/AboutUs";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Test from "../components/tests/Test";
 
 const Dashboard = () => {
   return (
@@ -19,19 +18,14 @@ const Dashboard = () => {
               <Sidebar />
             </div>
             <Switch>
-              <Route exact path="/data-table">
+              <Route exact path="/dashboard/data-table">
                 <div className="col">
                   <DataTable />
                 </div>
               </Route>
-              <Route exact path="/about-us">
+              <Route exact path="/dashboard/about-us">
                 <div className="col-md-9">
                   <AboutUs />
-                </div>
-              </Route>
-              <Route exact path="/test">
-                <div className="col">
-                  <Test />
                 </div>
               </Route>
             </Switch>

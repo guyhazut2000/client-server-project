@@ -19,6 +19,9 @@ const App = () => {
   return (
     <Router>
       <Switch>
+        <Route exact path="/">
+          {user ? <Dashboard /> : <Redirect to="/sign-in" />}
+        </Route>
         <Route exact path="/sign-in">
           {user ? <Redirect to="/" /> : <Login />}
         </Route>
@@ -28,7 +31,10 @@ const App = () => {
         <Route exact path="/forgot-password">
           {user ? <Redirect to="/dashboard" /> : <ForgotPasswordForm />}
         </Route>
-        <Route exact path="/">
+        <Route exact path="/dashboard">
+          {user ? <Dashboard /> : <Redirect to="/sign-in" />}
+        </Route>
+        <Route exact path="/dashboard-data-table">
           {user ? <Dashboard /> : <Redirect to="/sign-in" />}
         </Route>
         <Route path="*" component={PageNotFound} />

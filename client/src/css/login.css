@@ -100,3 +100,7 @@ h6 {
     line-height: 70px;
   }
 }
+
+.form-group p {
+  font-size: small;
+}

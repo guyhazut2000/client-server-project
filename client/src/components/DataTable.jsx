@@ -4,7 +4,7 @@ import ToolkitProvider, {
   CSVExport,
 } from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+import { Type } from "react-bootstrap-table2-editor";
 import WorkerDataService from "../services/Worker";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
@@ -34,7 +34,7 @@ const DataTable = () => {
   }, []);
   // get all car treatments data
 
-  console.log(carTreatments);
+  // console.log(carTreatments);
   const columns = [
     {
       dataField: "treatmentNumber",

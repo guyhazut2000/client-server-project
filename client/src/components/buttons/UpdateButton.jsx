@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
@@ -7,8 +7,6 @@ import WorkerDataService from "../../services/Worker";
 const UpdateButton = (props) => {
   var rowContent = props.row;
   //   console.log("row data :", rowContent);
-  var carTreatmentInfo = rowContent.treatmentInformation;
-  console.log("car info:", carTreatmentInfo);
   var workerEmail = props.workerEmail;
 
   const handleUpdateClick = async (e) => {
@@ -64,9 +62,10 @@ const UpdateButton = (props) => {
           });
         }
         // window.location.reload();
-        setTimeout(function () {
-          window.location.reload();
-        }, 2000);
+        // setTimeout(function () {
+        //   // window.location.reload();
+        //   // window.location.assign(window.location.href);
+        // }, 2000);
       } catch (error) {
         console.log(error);
       }

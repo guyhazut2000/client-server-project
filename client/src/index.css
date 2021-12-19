@@ -100,3 +100,12 @@ h6 {
     line-height: 70px;
   }
 }
+.page-not-found {
+  font-size: 2rem;
+}
+.page-not-found h1 {
+  font-size: 10rem;
+}
+.page-not-found h3 {
+  font-size: 3rem;
+}

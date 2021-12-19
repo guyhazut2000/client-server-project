@@ -1,12 +1,5 @@
 import React from "react";
 import "../css/topbar.css";
-// import {
-//   NotificationsNone,
-//   Language,
-//   Settings,
-//   Search,
-// } from "@material-ui/icons";
-import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { resetUsersData } from "../redux/userRedux";
@@ -20,41 +13,31 @@ const TopBar = () => {
     e.preventDefault();
     // reset redux user to initialized values.
     if (user) {
+      // clear user data
       dispatch(resetUsersData());
+      // clear localStorage data
+      localStorage.clear();
       history.push("/");
     }
   };
 
   return (
-    <div className="topbar">
+    <div className="topbar row text-nowrap d-flex m-0">
       <div className="topbarWrapper">
-        <div className="topLeft align-items-center ">
-          <Link to="/">
+        <div className="topLeft align-items-center">
+          {/* <Link to="/dashboard">
             <span className="logo">Car Service App</span>
-          </Link>
+          </Link> */}
+          <a className="logo" href="/dashboard">
+            <p>Car Service App</p>
+          </a>
           <div className="topMiddleLeft">
             <div class="input-group"></div>
           </div>
         </div>
         <div className="topRight">
-          {/* <div className="topbarIconContainer">
-            <NotificationsNone />
-            <span className="topIconBadge">2</span>
-          </div>
-          <div className="topbarIconContainer">
-            <Language />
-            <span className="topIconBadge">2</span>
-          </div>
-          <div className="topbarIconContainer">
-            <Settings />
-          </div>
-          <img
-            src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-            alt=""
-            className="topAvatar"
-          /> */}
           <button
-            className="btn btn-success"
+            className="btn btn-lg"
             onClick={(e) => {
               handleLogoutClick(e);
             }}

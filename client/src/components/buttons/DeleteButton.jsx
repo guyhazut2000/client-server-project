@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
@@ -33,7 +33,7 @@ const DeleteButton = (props) => {
               timer: 1000,
             });
             setTimeout(() => {
-              window.location.reload();
+              // window.location.reload();
             }, 1000);
           });
         }

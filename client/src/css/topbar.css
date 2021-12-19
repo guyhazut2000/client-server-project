@@ -20,11 +20,18 @@
   font-size: 30px;
   color: rgb(255, 255, 255);
   cursor: pointer;
+  text-decoration: none;
+}
+.logo:hover {
+  text-decoration: none;
 }
 
 .topRight {
   display: flex;
+  position: absolute;
   align-items: center;
+  right: 10px;
+  justify-content: center;
 }
 .topLeft {
   display: flex;
@@ -33,35 +40,22 @@
   width: 40%;
   align-items: center;
 }
-
-.topbarIconContainer {
-  position: relative;
-  cursor: pointer;
-  margin-right: 10px;
-  color: #555;
+.topRight button {
+  background-color: #fff;
+  color: rgb(0, 0, 0);
+  font-size: small;
+  font-weight: bold;
 }
-
-.topIconBadge {
-  width: 15px;
-  height: 15px;
-  position: absolute;
-  top: -5px;
-  right: 0px;
+.topRight button:hover {
+  color: rgb(255, 255, 255);
   background-color: red;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
 }
-
-.topAvatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.input-group {
-  background-color: red;
+@media (max-width: 768px) {
+  body {
+    font-size: 17px;
+    display: block;
+  }
+  .logo {
+    font-size: 24px;
+  }
 }
