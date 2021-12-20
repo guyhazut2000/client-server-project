@@ -34,7 +34,10 @@ const App = () => {
         <Route exact path="/dashboard">
           {user ? <Dashboard /> : <Redirect to="/sign-in" />}
         </Route>
-        <Route exact path="/dashboard-data-table">
+        <Route exact path="/dashboard/data-table">
+          {user ? <Dashboard /> : <Redirect to="/sign-in" />}
+        </Route>
+        <Route exact path="/dashboard/about-us">
           {user ? <Dashboard /> : <Redirect to="/sign-in" />}
         </Route>
         <Route path="*" component={PageNotFound} />

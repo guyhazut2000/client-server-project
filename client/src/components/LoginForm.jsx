@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import validator from "validator";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../redux/userRedux";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,13 @@ const Login = () => {
   const dispatch = useDispatch();
   let history = useHistory();
   var isChecked = false;
+  const [isVerified, setIsVerified] = useState(false);
+
+  // re captcha on change
+  const onChange = (value) => {
+    // console.log("Captcha value:", value);
+    setIsVerified(true);
+  };
 
   useEffect(() => {
     var tempCookie = JSON.parse(getCookie("rememberMe"));
@@ -183,8 +191,16 @@ const Login = () => {
               <p>Remember me</p>
             </label>
           </div>
+          <div className="g-re-captcha">
+            <ReCAPTCHA
+              onExpired={() => setIsVerified(false)}
+              sitekey="6LdeFrcdAAAAAKZz6IG-ZpAhU-OdxuXxSinfGh6e"
+              onChange={onChange}
+            />
+          </div>
           <div className="form-group">
             <button
+              disabled={!isVerified}
               type="button"
               className="btn btn-block create-account"
               onClick={(e) => handleLoginClick(e)}
