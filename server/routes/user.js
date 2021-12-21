@@ -74,12 +74,13 @@ router.put("/add-user", async (req, res) => {
         process.env.PASS_SEC
       ).toString(),
     });
-    const res = await User(newUser).save();
+    const result = await User(newUser).save();
+    console.log(result);
     // send mail with password
-    if (res) {
+    if (result) {
       var mailOptions = {
         from: "clientservertesting2021@gmail.com",
-        to: req.params.email,
+        to: req.body.email,
         // to: "guyhazut3000@gmail.com",
         subject: "Car Service App",
         text: "Welcome! Thanks for signing up for our app.",
@@ -88,12 +89,13 @@ router.put("/add-user", async (req, res) => {
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           console.log(error);
+          res.status(500).json({ error: err.message });
         } else {
           console.log("Email sent: " + info.response);
+          res.status(200).json({ status: true });
         }
       });
     }
-    res.status(200).json({ status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

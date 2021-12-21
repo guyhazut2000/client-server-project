@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import UserDataService from "../services/User";
 import validator from "validator";
 import Swal from "sweetalert2";
 import "bootstrap";
 import { useHistory } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
+import "../css/login.css";
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ const SignUpForm = () => {
   const [lastName, setLastName] = useState("");
   let history = useHistory();
   const [isVerified, setIsVerified] = useState(false);
+  const [isVerifiedPassword, setIsVerifiedPassword] = useState(false);
 
   // function to validate string value.
   const validateString = (string) => {
@@ -90,6 +92,112 @@ const SignUpForm = () => {
     // console.log("Captcha value:", value);
     setIsVerified(true);
   };
+
+  useEffect(() => {
+    var myInput = document.getElementById("password");
+    var letter = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
+    var specialCharacter = document.getElementById("special-character");
+
+    // validate password by patterns
+    const passwordValidator = () => {
+      var passwordVerifier = {
+        lowerCaseLetters: false,
+        upperCaseLetters: false,
+        numbers: false,
+        specialCharacter: false,
+        length: false,
+      };
+      // Validate lowercase letters
+      var lowerCaseLetters = /[a-z]/g;
+      if (myInput.value.match(lowerCaseLetters)) {
+        letter.classList.remove("invalid");
+        letter.classList.add("valid");
+        passwordVerifier.lowerCaseLetters = true;
+      } else {
+        letter.classList.remove("valid");
+        letter.classList.add("invalid");
+        passwordVerifier.lowerCaseLetters = false;
+      }
+
+      // Validate capital letters
+      var upperCaseLetters = /[A-Z]/g;
+      if (myInput.value.match(upperCaseLetters)) {
+        capital.classList.remove("invalid");
+        capital.classList.add("valid");
+        passwordVerifier.upperCaseLetters = true;
+      } else {
+        capital.classList.remove("valid");
+        capital.classList.add("invalid");
+        passwordVerifier.upperCaseLetters = false;
+      }
+
+      // Validate numbers
+      var numbers = /[0-9]/g;
+      if (myInput.value.match(numbers)) {
+        number.classList.remove("invalid");
+        number.classList.add("valid");
+        passwordVerifier.numbers = true;
+      } else {
+        number.classList.remove("valid");
+        number.classList.add("invalid");
+        passwordVerifier.numbers = false;
+      }
+
+      // Validate special character
+      var specialCharacters = /[!@#$%^&*)(-+|}{;_:/?.><]/g;
+      if (myInput.value.match(specialCharacters)) {
+        specialCharacter.classList.remove("invalid");
+        specialCharacter.classList.add("valid");
+        passwordVerifier.specialCharacter = true;
+      } else {
+        specialCharacter.classList.remove("valid");
+        specialCharacter.classList.add("invalid");
+        passwordVerifier.specialCharacter = false;
+      }
+
+      // Validate length
+      if (myInput.value.length >= 6) {
+        length.classList.remove("invalid");
+        length.classList.add("valid");
+        passwordVerifier.length = true;
+      } else {
+        length.classList.remove("valid");
+        length.classList.add("invalid");
+        passwordVerifier.length = false;
+      }
+      // console.log(passwordVerifier);
+      if (
+        !passwordVerifier.lowerCaseLetters ||
+        !passwordVerifier.upperCaseLetters ||
+        !passwordVerifier.numbers ||
+        !passwordVerifier.specialCharacter ||
+        !passwordVerifier.length
+      ) {
+        // document.getElementById("submit-btn").disabled = true;
+        setIsVerifiedPassword(false);
+      } else {
+        // document.getElementById("submit-btn").disabled = false;
+        setIsVerifiedPassword(true);
+      }
+    };
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = passwordValidator;
+
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function () {
+      document.getElementById("message").style.display = "block";
+      passwordValidator();
+
+      // When the user clicks outside of the password field, hide the message box
+      myInput.onblur = function () {
+        document.getElementById("message").style.display = "none";
+      };
+    };
+  }, [isVerified]);
+
   // handle sign up click button
   const handleSignUpClick = async (e) => {
     e.preventDefault();
@@ -107,7 +215,7 @@ const SignUpForm = () => {
       var user = await UserDataService.getUserByEmail(email);
       // if email is already exists in db.
       if (user.data !== null) {
-        console.log(user.data);
+        // console.log(user.data);
         Swal.fire(
           "Sign Up Error",
           "Email is already been used. please choose different email.",
@@ -125,6 +233,7 @@ const SignUpForm = () => {
         repeatPassword: repeatPassword,
       };
       var newUser = await UserDataService.createNewUser(data);
+      console.log(newUser);
       if (newUser.data !== null) {
         Swal.fire({
           position: "top-end",
@@ -186,7 +295,7 @@ const SignUpForm = () => {
               }}
             />
           </div>
-          <div className="form-group">
+          {/* <div className="form-group">
             <input
               type="password"
               className="form-control item"
@@ -196,6 +305,54 @@ const SignUpForm = () => {
                 setPassword(e.target.value);
               }}
             />
+          </div> */}
+          <div className="form-group">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*)(-+|}{;_:/?.><]).{6,}"
+              title="Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
+              className="form-control item"
+              // id="password"
+              placeholder="Password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              required
+            />
+          </div>
+          <div id="message" className="container">
+            <div className="col">
+              <div className="row">
+                <h3>Password must contain the following:</h3>
+              </div>
+              <div className="row">
+                <p id="letter" class="invalid">
+                  A <b>lowercase</b> letter
+                </p>
+              </div>
+              <div className="row">
+                <p id="capital" class="invalid">
+                  A <b>capital (uppercase)</b> letter
+                </p>
+              </div>
+              <div className="row">
+                <p id="number" class="invalid">
+                  A <b>number</b>
+                </p>
+              </div>
+              <div className="row">
+                <p id="length" class="invalid">
+                  Minimum <b>6 characters</b>
+                </p>
+              </div>
+              <div className="row">
+                <p id="special-character" class="invalid">
+                  Special character <b>(!,@,#,etc.).</b>
+                </p>
+              </div>
+            </div>
           </div>
           <div className="form-group">
             <input
@@ -217,7 +374,7 @@ const SignUpForm = () => {
           </div>
           <div className="form-group">
             <button
-              disabled={!isVerified}
+              disabled={!isVerified || !isVerifiedPassword}
               type="button"
               className="btn btn-block create-account"
               onClick={(e) => {

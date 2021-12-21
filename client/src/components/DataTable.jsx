@@ -273,7 +273,7 @@ const DataTable = () => {
   };
 
   return (
-    <div>
+    <div className="container row">
       <ToolkitProvider
         keyField="id"
         data={carTreatments}
@@ -289,6 +289,9 @@ const DataTable = () => {
             <BootstrapTable
               {...props.baseProps}
               pagination={paginationFactory(options)}
+              striped
+              bordered={true}
+              wrapperClasses="table-responsive"
             />
             <ExportCSVButton {...props.csvProps}>Export CSV</ExportCSVButton>
           </div>

@@ -13,8 +13,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   let history = useHistory();
-  var isChecked = false;
+  const [isChecked, setIsChecked] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [isVerifiedPassword, setIsVerifiedPassword] = useState(false);
 
   // re captcha on change
   const onChange = (value) => {
@@ -23,18 +24,124 @@ const Login = () => {
   };
 
   useEffect(() => {
+    // check cookie data
     var tempCookie = JSON.parse(getCookie("rememberMe"));
-    // console.log(tempCookie !== null);
     if (tempCookie !== null) {
-      // console.log(tempCookie);
-      // console.log(document.getElementById("email").value);
-      // console.log(document.getElementById("password").value);
       document.getElementById("email").value = tempCookie.email;
       document.getElementById("password").value = tempCookie.password;
       setEmail(tempCookie.email);
       setPassword(tempCookie.password);
+      // handle password validator code
+      var myInput = document.getElementById("password");
+      myInput.value = tempCookie.password;
+    } else {
+      myInput = document.getElementById("password");
     }
-  }, []);
+
+    var letter = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
+    var specialCharacter = document.getElementById("special-character");
+    // validate password by patterns
+    const passwordValidator = () => {
+      var passwordVerifier = {
+        lowerCaseLetters: false,
+        upperCaseLetters: false,
+        numbers: false,
+        specialCharacter: false,
+        length: false,
+      };
+      // Validate lowercase letters
+      var lowerCaseLetters = /[a-z]/g;
+      if (myInput.value.match(lowerCaseLetters)) {
+        letter.classList.remove("invalid");
+        letter.classList.add("valid");
+        passwordVerifier.lowerCaseLetters = true;
+      } else {
+        letter.classList.remove("valid");
+        letter.classList.add("invalid");
+        passwordVerifier.lowerCaseLetters = false;
+      }
+
+      // Validate capital letters
+      var upperCaseLetters = /[A-Z]/g;
+      if (myInput.value.match(upperCaseLetters)) {
+        capital.classList.remove("invalid");
+        capital.classList.add("valid");
+        passwordVerifier.upperCaseLetters = true;
+      } else {
+        capital.classList.remove("valid");
+        capital.classList.add("invalid");
+        passwordVerifier.upperCaseLetters = false;
+      }
+
+      // Validate numbers
+      var numbers = /[0-9]/g;
+      if (myInput.value.match(numbers)) {
+        number.classList.remove("invalid");
+        number.classList.add("valid");
+        passwordVerifier.numbers = true;
+      } else {
+        number.classList.remove("valid");
+        number.classList.add("invalid");
+        passwordVerifier.numbers = false;
+      }
+
+      // Validate special character
+      var specialCharacters = /[!@#$%^&*)(-+|}{;_:/?.><]/g;
+      if (myInput.value.match(specialCharacters)) {
+        specialCharacter.classList.remove("invalid");
+        specialCharacter.classList.add("valid");
+        passwordVerifier.specialCharacter = true;
+      } else {
+        specialCharacter.classList.remove("valid");
+        specialCharacter.classList.add("invalid");
+        passwordVerifier.specialCharacter = false;
+      }
+
+      // Validate length
+      if (myInput.value.length >= 6) {
+        length.classList.remove("invalid");
+        length.classList.add("valid");
+        passwordVerifier.length = true;
+      } else {
+        length.classList.remove("valid");
+        length.classList.add("invalid");
+        passwordVerifier.length = false;
+      }
+      // console.log(passwordVerifier);
+      if (
+        !passwordVerifier.lowerCaseLetters ||
+        !passwordVerifier.upperCaseLetters ||
+        !passwordVerifier.numbers ||
+        !passwordVerifier.specialCharacter ||
+        !passwordVerifier.length
+      ) {
+        // document.getElementById("submit-btn").disabled = true;
+        setIsVerifiedPassword(false);
+      } else {
+        // document.getElementById("submit-btn").disabled = false;
+        setIsVerifiedPassword(true);
+      }
+    };
+
+    passwordValidator();
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = passwordValidator;
+
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function () {
+      document.getElementById("message").style.display = "block";
+      passwordValidator();
+
+      // When the user clicks outside of the password field, hide the message box
+      myInput.onblur = function () {
+        document.getElementById("message").style.display = "none";
+      };
+    };
+  }, [isVerified]);
+  // console.log(isVerified);
 
   function setCookie(name, value, days) {
     var expires = "";
@@ -61,7 +168,7 @@ const Login = () => {
   }
 
   const handleRememberMeClick = (e) => {
-    isChecked = e.target.checked;
+    setIsChecked(e.target.checked);
   };
   // function to validate fields.
   const validateFields = () => {
@@ -81,7 +188,7 @@ const Login = () => {
         status: false,
         error: {
           header: "Wrong Email Format",
-          msg: "Please fill Email correctly. for example - test@gmail.com",
+          msg: "Please fill Email correctly. for example - isVerifiedPassword@gmail.com",
         },
       };
     }
@@ -117,7 +224,6 @@ const Login = () => {
         // set currentUser in redux store
         dispatch(loginSuccess(user));
         // remember me func
-        // console.log(isChecked);
         if (isChecked) {
           var cookieData = JSON.stringify({
             email: email,
@@ -162,6 +268,7 @@ const Login = () => {
               className="form-control item"
               id="email"
               placeholder="Enter Email Address..."
+              required
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -170,24 +277,61 @@ const Login = () => {
           <div className="form-group">
             <input
               type="password"
-              className="form-control item"
               id="password"
+              name="password"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*)(-+|}{;_:/?.><]).{6,}"
+              title="Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
+              className="form-control item"
+              // id="password"
               placeholder="Password"
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
+              required
             />
           </div>
-          <div className="form-group checkbox">
-            <label>
-              <input
-                type="checkbox"
-                value="rememberMe"
-                id="rememberMe"
-                onClick={(e) => {
-                  handleRememberMeClick(e);
-                }}
-              />
+          <div id="message" className="container">
+            <div className="col">
+              <div className="row">
+                <h3>Password must contain the following:</h3>
+              </div>
+              <div className="row">
+                <p id="letter" class="invalid">
+                  A <b>lowercase</b> letter
+                </p>
+              </div>
+              <div className="row">
+                <p id="capital" class="invalid">
+                  A <b>capital (uppercase)</b> letter
+                </p>
+              </div>
+              <div className="row">
+                <p id="number" class="invalid">
+                  A <b>number</b>
+                </p>
+              </div>
+              <div className="row">
+                <p id="length" class="invalid">
+                  Minimum <b>6 characters</b>
+                </p>
+              </div>
+              <div className="row">
+                <p id="special-character" class="invalid">
+                  Special character <b>(!,@,#,etc.).</b>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="form-group remember-me d-inline-block m-0 p-0">
+            <input
+              type="checkbox"
+              value="rememberMe"
+              id="rememberMe"
+              onClick={(e) => {
+                handleRememberMeClick(e);
+              }}
+            />
+            <label className="remember-me-text">
               <p>Remember me</p>
             </label>
           </div>
@@ -200,9 +344,10 @@ const Login = () => {
           </div>
           <div className="form-group">
             <button
-              disabled={!isVerified}
+              disabled={!isVerified || !isVerifiedPassword}
               type="button"
               className="btn btn-block create-account"
+              id="submit-btn"
               onClick={(e) => handleLoginClick(e)}
             >
               Login

@@ -9,22 +9,22 @@ const Dashboard = () => {
   return (
     <Router>
       <div>
-        <div className="container-fluid">
+        <div className="container-fluid d-md-block">
           <div className="row">
             <TopBar />
           </div>
           <div className="row">
-            <div className="col-md-2 p-0">
+            <div className="col-lg-2 d-none d-md-block">
               <Sidebar />
             </div>
             <Switch>
               <Route exact path="/dashboard/data-table">
-                <div className="col">
+                <div className="col my-5">
                   <DataTable />
                 </div>
               </Route>
               <Route exact path="/dashboard/about-us">
-                <div className="col-md-9">
+                <div className="col mx-5 text-center my-5">
                   <AboutUs />
                 </div>
               </Route>
