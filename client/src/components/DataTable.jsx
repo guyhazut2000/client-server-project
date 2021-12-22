@@ -11,6 +11,7 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
 const { SearchBar, ClearSearchButton } = Search;
 const { ExportCSVButton } = CSVExport;
@@ -290,7 +291,8 @@ const DataTable = () => {
               {...props.baseProps}
               pagination={paginationFactory(options)}
               striped
-              bordered={true}
+              hover
+              condensed
               wrapperClasses="table-responsive"
             />
             <ExportCSVButton {...props.csvProps}>Export CSV</ExportCSVButton>
