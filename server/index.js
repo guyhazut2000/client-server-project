@@ -21,7 +21,7 @@ app.use(express.json());
 // app.use("/api/car-treatments", carTreatmentRoute);
 app.use("/users", userRoute);
 app.use("/car-treatments", carTreatmentRoute);
-app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
+app.use("*", (req, res) => res.status(404).json({ error: "Page not found" }));
 
 //start server
 app.listen(process.env.PORT || 5000, () => {
