@@ -1,3 +1,4 @@
+import "../css/dataTable.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
@@ -274,7 +275,7 @@ const DataTable = () => {
   };
 
   return (
-    <div className="container row">
+    <div className="container">
       <ToolkitProvider
         keyField="id"
         data={carTreatments}
@@ -282,10 +283,10 @@ const DataTable = () => {
         search
       >
         {(props) => (
-          <div>
+          <>
             <h3>Input something at below input field:</h3>
-            <SearchBar {...props.searchProps} />
-            <ClearSearchButton {...props.searchProps} />
+            <SearchBar className="search" {...props.searchProps} />
+            <ClearSearchButton className="clear-btn" {...props.searchProps} />
             <hr />
             <BootstrapTable
               {...props.baseProps}
@@ -293,10 +294,10 @@ const DataTable = () => {
               striped
               hover
               condensed
-              wrapperClasses="table-responsive"
+              wrapperClasses="table table-responsive"
             />
             <ExportCSVButton {...props.csvProps}>Export CSV</ExportCSVButton>
-          </div>
+          </>
         )}
       </ToolkitProvider>
     </div>

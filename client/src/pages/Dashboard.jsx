@@ -9,7 +9,7 @@ const Dashboard = () => {
   return (
     <Router>
       <div>
-        <div className="container-fluid d-md-block">
+        <div className="container-fluid ">
           <div className="row">
             <TopBar />
           </div>
@@ -19,7 +19,7 @@ const Dashboard = () => {
             </div>
             <Switch>
               <Route exact path="/dashboard/data-table">
-                <div className="col my-5 mx-5">
+                <div className="col my-5">
                   <DataTable />
                 </div>
               </Route>
