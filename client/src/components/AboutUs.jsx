@@ -7,7 +7,7 @@ import "../css/about.css";
 const AboutUs = () => {
   return (
     <div>
-      <div className="row d-block">
+      <div className="about-container row d-block mx-5">
         <div className="about-header fw-bold my-auto">
           <h1>About Us</h1>
           <br />

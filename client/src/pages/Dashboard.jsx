@@ -14,12 +14,12 @@ const Dashboard = () => {
             <TopBar />
           </div>
           <div className="row">
-            <div className="col-lg-2 d-none d-md-block">
+            <div className="col-md-3 d-block h-25 ">
               <Sidebar />
             </div>
             <Switch>
               <Route exact path="/dashboard/data-table">
-                <div className="col my-5">
+                <div className="col my-5 mx-5">
                   <DataTable />
                 </div>
               </Route>
