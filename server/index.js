@@ -17,10 +17,9 @@ mongoose
 app.use(cors());
 app.use(express.json());
 
-// app.use("/api/users", userRoute);
-// app.use("/api/car-treatments", carTreatmentRoute);
-app.use("/users", userRoute);
-app.use("/car-treatments", carTreatmentRoute);
+app.use("/api/users", userRoute);
+app.use("/api/car-treatments", carTreatmentRoute);
+
 app.use("*", (req, res) => res.status(404).json({ error: "Page not found" }));
 
 //start server
