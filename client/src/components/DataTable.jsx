@@ -196,6 +196,7 @@ const DataTable = (props) => {
       dataField: "treatmentNumber",
       text: "Treatment Number",
       sort: true,
+      searchable: false,
     },
     {
       dataField: "treatmentInformation",
@@ -213,11 +214,13 @@ const DataTable = (props) => {
         type: Type.DATE,
       },
       sort: true,
+      searchable: false,
     },
     {
       dataField: "workerEmail",
       text: "Worker Email",
       sort: true,
+      searchable: false,
     },
     {
       dataField: "carNumber",
@@ -230,6 +233,7 @@ const DataTable = (props) => {
         }
         return b - a; // desc
       },
+      searchable: false,
     },
     {
       dataField: "action",
@@ -241,6 +245,7 @@ const DataTable = (props) => {
           </div>
         );
       },
+      searchable: false,
     },
   ];
 
@@ -295,20 +300,26 @@ const DataTable = (props) => {
         {(props) => (
           <>
             <h3>Input something at below input field:</h3>
-            <SearchBar {...props.searchProps} />
-            <ClearSearchButton
-              className="btn btn-clear btn-lg btn-block btn-secondary mx-3 "
-              {...props.searchProps}
-            />
-            <button
-              className="btn btn-add btn-lg btn-block btn-primary  mx-2"
-              onClick={(e) => {
-                e.preventDefault();
-                history.push("/dashboard/add-data");
-              }}
-            >
-              Add
-            </button>
+            <div className="row">
+              <div className="col-10">
+                <SearchBar {...props.searchProps} />
+                <ClearSearchButton
+                  className="btn btn-clear btn-lg btn-block btn-secondary mx-3 "
+                  {...props.searchProps}
+                />
+              </div>
+              <div className="col-2">
+                <button
+                  className="btn btn-add btn-lg btn-block btn-primary  mx-2"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    history.push("/dashboard/add-data");
+                  }}
+                >
+                  Add
+                </button>
+              </div>
+            </div>
             <hr />
             <BootstrapTable
               {...props.baseProps}

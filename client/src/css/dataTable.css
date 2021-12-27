@@ -39,7 +39,7 @@ button {
 }
 
 .btn-add {
-  right: 2%;
+  float: right !important;
   position: absolute;
   width: 50px;
   color: white !important;
