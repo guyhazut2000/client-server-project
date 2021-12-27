@@ -10,6 +10,9 @@ class WorkerDataService {
   updateCarTreatmentByID(data) {
     return http.post("/car-treatments/update", data);
   }
+  addCarTreatment(data) {
+    return http.put("/car-treatments/add", data);
+  }
 }
 
 export default new WorkerDataService();

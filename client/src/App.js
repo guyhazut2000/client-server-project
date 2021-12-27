@@ -32,13 +32,32 @@ const App = () => {
           {user ? <Redirect to="/dashboard" /> : <ForgotPasswordForm />}
         </Route>
         <Route exact path="/dashboard">
-          {user ? <Dashboard /> : <Redirect to="/sign-in" />}
+          {user ? (
+            <Dashboard workerEmail={user.data.email} />
+          ) : (
+            <Redirect to="/sign-in" />
+          )}
         </Route>
         <Route exact path="/dashboard/data-table">
-          {user ? <Dashboard /> : <Redirect to="/sign-in" />}
+          {user ? (
+            <Dashboard workerEmail={user.data.email} />
+          ) : (
+            <Redirect to="/sign-in" />
+          )}
         </Route>
         <Route exact path="/dashboard/about-us">
-          {user ? <Dashboard /> : <Redirect to="/sign-in" />}
+          {user ? (
+            <Dashboard workerEmail={user.data.email} />
+          ) : (
+            <Redirect to="/sign-in" />
+          )}
+        </Route>
+        <Route exact path="/dashboard/add-data">
+          {user ? (
+            <Dashboard workerEmail={user.data.email} />
+          ) : (
+            <Redirect to="/sign-in" />
+          )}
         </Route>
         <Route path="*" component={PageNotFound} />
       </Switch>

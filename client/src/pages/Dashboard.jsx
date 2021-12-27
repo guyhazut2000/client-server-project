@@ -4,8 +4,9 @@ import DataTable from "../components/DataTable";
 import TopBar from "../components/TopBar";
 import AboutUs from "../components/AboutUs";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import AddCarTreatmentForm from "../components/AddCarTreatmentForm";
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   return (
     <Router>
       <div>
@@ -20,7 +21,12 @@ const Dashboard = () => {
             <Switch>
               <Route exact path="/dashboard/data-table">
                 <div className="col my-5">
-                  <DataTable />
+                  <DataTable workerEmail={props.workerEmail} />
+                </div>
+              </Route>
+              <Route exact path="/dashboard/add-data">
+                <div className="col my-5">
+                  <AddCarTreatmentForm workerEmail={props.workerEmail} />
                 </div>
               </Route>
               <Route exact path="/dashboard/about-us">

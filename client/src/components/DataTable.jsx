@@ -1,3 +1,4 @@
+import { useHistory } from "react-router-dom";
 import "../css/dataTable.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -18,7 +19,8 @@ const { SearchBar, ClearSearchButton } = Search;
 const { ExportCSVButton } = CSVExport;
 
 // display data table component
-const DataTable = () => {
+const DataTable = (props) => {
+  let history = useHistory();
   console.log("data table is rendered");
   // Delete Button
   const DeleteButton = (props) => {
@@ -93,6 +95,14 @@ const DataTable = () => {
         focusConfirm: false,
         preConfirm: () => {
           // validated fields
+          if (document.getElementById("carTreatmentInformation").value === "") {
+            Swal.showValidationMessage(
+              "Car Treatment Information field is empty"
+            );
+          }
+          if (document.getElementById("carNumber").value === "") {
+            Swal.showValidationMessage("Car Number field is empty");
+          }
           if (parseInt(document.getElementById("carNumber").value) < 0) {
             Swal.showValidationMessage("Car Number must be positive!");
           }
@@ -226,7 +236,7 @@ const DataTable = () => {
       formatter: (rowContent, row) => {
         return (
           <div className="d-flex flex-row">
-            <UpdateButton row={row} workerEmail="guysdfsfd@gmail.com" />
+            <UpdateButton row={row} workerEmail={props.workerEmail} />
             <DeleteButton row={row} />
           </div>
         );
@@ -285,8 +295,20 @@ const DataTable = () => {
         {(props) => (
           <>
             <h3>Input something at below input field:</h3>
-            <SearchBar className="search" {...props.searchProps} />
-            <ClearSearchButton className="clear-btn" {...props.searchProps} />
+            <SearchBar {...props.searchProps} />
+            <ClearSearchButton
+              className="btn btn-clear btn-lg btn-block btn-secondary mx-3 "
+              {...props.searchProps}
+            />
+            <button
+              className="btn btn-add btn-lg btn-block btn-primary  mx-2"
+              onClick={(e) => {
+                e.preventDefault();
+                history.push("/dashboard/add-data");
+              }}
+            >
+              Add
+            </button>
             <hr />
             <BootstrapTable
               {...props.baseProps}
