@@ -127,7 +127,7 @@ const DataTable = (props) => {
             await WorkerDataService.updateCarTreatmentByID({
               _id: rowContent._id,
               treatmentInformation: formValues[0],
-              workerEmail: workerEmail,
+              workerEmail: user.data.email,
               carNumber: formValues[1],
             });
           if (updatedCarTreatment.data !== null) {
@@ -242,7 +242,7 @@ const DataTable = (props) => {
       formatter: (rowContent, row) => {
         return (
           <div className="d-flex flex-row">
-            <UpdateButton row={row} workerEmail={props.workerEmail} />
+            <UpdateButton row={row} />
             <DeleteButton row={row} />
           </div>
         );
