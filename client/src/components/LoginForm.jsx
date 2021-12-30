@@ -26,7 +26,7 @@ const Login = () => {
   useEffect(() => {
     // check cookie data
     var tempCookie = JSON.parse(getCookie("rememberMe"));
-    if (tempCookie !== null) {
+    if (tempCookie !== null && email === "" && password === "") {
       document.getElementById("email").value = tempCookie.email;
       document.getElementById("password").value = tempCookie.password;
       setEmail(tempCookie.email);
@@ -37,6 +37,8 @@ const Login = () => {
     } else {
       myInput = document.getElementById("password");
     }
+    setEmail(document.getElementById("email").value);
+    setPassword(document.getElementById("password").value);
 
     var letter = document.getElementById("letter");
     var capital = document.getElementById("capital");
@@ -209,12 +211,11 @@ const Login = () => {
 
     // login user
     try {
-      setEmail(document.getElementById("email").value);
-      setPassword(document.getElementById("password").value);
       var data = {
-        email: email,
-        password: password,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
       };
+      console.log("user data", data);
       var user = await UserDataService.loginUser(data);
       // if email is already exists in db.
       if (user.data === null) {
@@ -227,10 +228,8 @@ const Login = () => {
         dispatch(loginSuccess(user));
         // remember me func
         if (isChecked) {
-          var cookieData = JSON.stringify({
-            email: email,
-            password: password,
-          });
+          var cookieData = JSON.stringify(data);
+          eraseCookie("rememberMe");
           setCookie("rememberMe", cookieData, 10);
         } else {
           eraseCookie("rememberMe");
