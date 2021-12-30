@@ -20,7 +20,6 @@ app.use(express.json());
 
 app.use("/api/users", userRoute);
 app.use("/api/car-treatments", carTreatmentRoute);
-// app.use("*", (req, res) => res.status(404).json({ error: "Page not found" }));
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
   // Set static folder
@@ -31,6 +30,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+app.use("*", (req, res) => res.status(404).json({ error: "Page not found" }));
 //start server
 app.listen(process.env.PORT || 5000, () => {
   console.log("Backend server is running on port " + process.env.PORT);
