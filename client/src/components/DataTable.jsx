@@ -14,12 +14,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import { useSelector } from "react-redux";
 
 const { SearchBar, ClearSearchButton } = Search;
 const { ExportCSVButton } = CSVExport;
 
 // display data table component
 const DataTable = (props) => {
+  const user = useSelector((state) => state.user.currentUser);
   let history = useHistory();
   console.log("data table is rendered");
   // Delete Button
@@ -76,7 +78,7 @@ const DataTable = (props) => {
   const UpdateButton = (props) => {
     var rowContent = props.row;
     //   console.log("row data :", rowContent);
-    var workerEmail = props.workerEmail;
+    var workerEmail = user.data.email;
 
     const handleUpdateClick = async (e) => {
       e.preventDefault();
