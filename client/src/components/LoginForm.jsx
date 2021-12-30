@@ -210,8 +210,8 @@ const Login = () => {
     // login user
     try {
       var data = {
-        email: email,
-        password: password,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
       };
       var user = await UserDataService.loginUser(data);
       // if email is already exists in db.
