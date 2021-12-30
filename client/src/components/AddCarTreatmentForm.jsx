@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import WorkerDataService from "../services/Worker";
+import { useSelector } from "react-redux";
 
 const AddCarTreatmentForm = (props) => {
+  const user = useSelector((state) => state.user.currentUser);
   const [treatmentInformation, setTreatmentInformation] = useState("");
   const [carNumber, setCarNumber] = useState("");
-  let workerEmail = props.workerEmail;
+  let workerEmail = user.data.email;
   let history = useHistory();
 
   const handleSubmitClick = async (e) => {
