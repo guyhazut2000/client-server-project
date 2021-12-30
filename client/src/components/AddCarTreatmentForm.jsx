@@ -9,6 +9,9 @@ const AddCarTreatmentForm = (props) => {
   const [treatmentInformation, setTreatmentInformation] = useState("");
   const [carNumber, setCarNumber] = useState("");
   let workerEmail = user.data.email;
+  console.log(workerEmail);
+  console.log(user);
+
   let history = useHistory();
 
   const handleSubmitClick = async (e) => {
