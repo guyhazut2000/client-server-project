@@ -209,9 +209,11 @@ const Login = () => {
 
     // login user
     try {
+      setEmail(document.getElementById("email").value);
+      setPassword(document.getElementById("password").value);
       var data = {
-        email: document.getElementById("email").value,
-        password: document.getElementById("password").value,
+        email: email,
+        password: password,
       };
       var user = await UserDataService.loginUser(data);
       // if email is already exists in db.
