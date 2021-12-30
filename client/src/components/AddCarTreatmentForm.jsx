@@ -43,6 +43,7 @@ const AddCarTreatmentForm = (props) => {
         workerEmail: workerEmail,
         carNumber: carNumber,
       };
+      console.log(data);
       const result = await WorkerDataService.addCarTreatment(data);
       if (result.data === null) {
         Swal.fire(
