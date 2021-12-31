@@ -34,7 +34,7 @@ button {
 .btn-clear {
   width: 50px !important;
 }
-.caret {
+#pageDropDown span {
   display: none;
 }
 
@@ -45,7 +45,8 @@ button {
   color: white !important;
 }
 
-button:hover {
+button:hover,
+button:focus {
   background-color: #0d6efd !important;
   color: white !important;
   transition: none !important;
