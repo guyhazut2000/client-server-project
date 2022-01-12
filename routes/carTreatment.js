@@ -17,13 +17,11 @@ router.delete("/delete", async (req, res) => {
     // sometimes mongodb allows multiple unique index's, this func is fixing the problem.
     // User.createIndexes();
     console.log("delete", req.body);
-    const isDeleted = await CarTreatment.findOneAndDelete({
-      treatmentNumber: req.body.treatmentNumber,
-    });
+    const isDeleted = await CarTreatment.findByIdAndDelete(req.body);
     console.log(isDeleted);
     isDeleted
       ? res.status(200).json({ status: "success" })
-      : res.status(403).json({ error: "car treatment is not exists in DB." });
+      : res.status(200).json({ error: "car treatment is not exists in DB." });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

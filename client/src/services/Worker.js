@@ -5,7 +5,7 @@ class WorkerDataService {
     return http.get("/car-treatments/get-all");
   }
   deleteCarTreatmentByID(data) {
-    return http.delete("/car-treatments/delete", data);
+    return http.delete("/car-treatments/delete", { data: data });
   }
   updateCarTreatmentByID(data) {
     return http.post("/car-treatments/update", data);
