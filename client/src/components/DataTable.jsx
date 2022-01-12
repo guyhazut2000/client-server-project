@@ -44,6 +44,7 @@ const DataTable = (props) => {
           if (result.isConfirmed) {
             // delete car treatment from DB.
             var data = { _id: carTreatmentID };
+            console.log(data);
             WorkerDataService.deleteCarTreatmentByID(data).then((res) => {
               refreshTable();
               console.log(res.data);

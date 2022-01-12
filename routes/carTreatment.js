@@ -18,7 +18,7 @@ router.delete("/delete", async (req, res) => {
     // User.createIndexes();
     console.log("delete", req.body);
     const isDeleted = await CarTreatment.findOneAndDelete({
-      _id: req.body._id,
+      treatmentNumber: req.body.treatmentNumber,
     });
     console.log(isDeleted);
     isDeleted
